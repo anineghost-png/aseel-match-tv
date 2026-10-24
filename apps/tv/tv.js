@@ -148,6 +148,11 @@
     Aseel.request("GET", "/api/fixtures", null, function (err, data) {
       if (err) {
         Aseel.text("network", "تعذر التحديث · نحتفظ بالبيانات");
+        if (!document.querySelector(".card"))
+          Aseel.text(
+            "empty",
+            "تعذر تحميل المباريات. تأكد من اتصال الخادم ثم حدّث الصفحة."
+          );
         return;
       }
       render(data);

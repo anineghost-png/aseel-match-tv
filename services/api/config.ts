@@ -5,6 +5,8 @@ export const configSchema = z.object({
   ADMIN_TOKEN: z
     .string()
     .min(32)
+    .max(256)
+    .regex(/^[\x21-\x7e]+$/)
     .refine((v) => !v.startsWith("replace-"), "Generate a random ADMIN_TOKEN"),
   DEMO_MODE: z
     .enum(["true", "false"])

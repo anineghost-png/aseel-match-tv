@@ -145,3 +145,10 @@ test("holding gamepad X selects once until released", async ({ page }) => {
   await page.clock.fastForward(300);
   expect(await page.evaluate(() => (window as any).clicks)).toBe(2);
 });
+test("initial network failure shows actionable Arabic error", async ({
+  page
+}) => {
+  await page.route("**/api/fixtures", (route) => route.abort());
+  await page.goto("/");
+  await expect(page.locator("#empty")).toContainText("تأكد من اتصال الخادم");
+});

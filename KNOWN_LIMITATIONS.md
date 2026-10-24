@@ -1,6 +1,6 @@
 # Known limitations / release blockers
 
-1. Private GitHub repository exists and origin is configured. It has NOT been pushed: connector permissions are available, but terminal Git authentication is unavailable. Connector commit creation cannot preserve original commit SHAs. Local history is preserved pending authenticated git push.
+1. GitHub is the source of truth. Original history is imported; main and work/ps4-foundation were synchronized at 0be31703c9453caae7a61450c09286b323c08e09 before RC work. GitHub API publication is used when native Git credentials are unavailable; exact objects are SHA-verified locally.
 2. M9 physical PS4 acceptance NOT run. DUALSHOCK 4 key delivery, native HLS, MSE, audio/video, fullscreen, 30-minute real refresh and 2-hour soak remain unverified.
 3. Installed Chromium lacks H264 and AAC (`MediaSource.isTypeSupported` false). Actual HLS playback test explicitly skipped; codec failure path tested. Gateway HTTP success is not video decode success.
 4. No real provider credentials used; fixture/standings adapters tested with mocks only. Real-data v1 acceptance remains open.
@@ -15,4 +15,4 @@
 13. Device verification is client-reported observed test progress, not hardware attestation. Re-probing creates a new unverified profile. Profiles/session telemetry retained locally; seven-day telemetry cleanup.
 14. Historical manual rules add evidence only; they never overcome missing both teams/time. Ranking thresholds and quality budgets require tuning on authorized provider data and real PS4 measurements.
 
-v1 is not declared complete. M0/M1 are desktop-validated; M2–M8 have implementation and automated evidence with the external/integration gates above. M10 hardening is a LAN baseline, not a production certification.
+v1 is not declared complete. M0/M1 are desktop-validated; M2–M8 have implementation and automated evidence with the external/integration gates above. M10 RC scope is LAN software readiness, not public-hosting certification or physical PS4 signoff. Maximum 100 saved device profiles; repeated probing can require local administrator cleanup.

@@ -13,7 +13,8 @@
     "test": "node --import tsx --test tests/*.test.ts",
     "test:browser": "playwright test",
     "check": "npm run build && npm test",
-    "media": "bash scripts/generate-test-media.sh"
+    "media": "node scripts/generate-test-media.mjs",
+    "ps4": "node scripts/setup.mjs --lan && npm run build && npm run media && npm start"
   },
   "dependencies": {
     "@fastify/rate-limit": "10.3.0",

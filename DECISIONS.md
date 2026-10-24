@@ -10,3 +10,5 @@
 - Formatter configured without trailing commas after ES5 parser caught function-call trailing commas. Regression test remains mandatory.
 - Original blueprint is unchanged; local Git history retained for later upload, never claim GitHub repository creation from local git init.
 - Resume: private GitHub repository now verified with connector push permission. Direct Git HTTPS cannot authenticate; keep exact original commit objects instead of reconstructing different commits through the contents API. Upload remains blocked, not completed.
+
+- RC1 supersedes previous upload blocker: remote history now exists at 0be3170. Connected Git data APIs preserve parentage; exact commit/tree SHA checks replace unavailable native Git transport, without redoing imports.

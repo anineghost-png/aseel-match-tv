@@ -2,6 +2,8 @@
 
 No physical PS4 success is claimed. Fill each item with date, console firmware/browser UA, display resolution, device profile ID, result and error notes. A desktop/browser capability profile is not physical acceptance.
 
+Preparation: install Node 24+ and FFmpeg; run `npm ci` then `npm run ps4`. Use the printed `PS4 candidate URL` for the adapter on the console network. `/compat`, `/controller`, and legal test media are included.
+
 1. Node backend on same trusted LAN. HOST=0.0.0.0, private-network firewall only, no router port forwarding. Open http://PC-LAN-IP:3000 and bookmark it.
 2. /compat: save capabilities; run generated native HLS test, then HLS.js only if available. Observe video/audio and verify actual advancement. Retain device profile ID.
 3. Confirm Arabic readability/no clipping at 1920×1080 and 1280×720.

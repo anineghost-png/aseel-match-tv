@@ -65,3 +65,22 @@ test("diagnostics never expose imported provider and source URLs", async () => {
     await app.close();
   }
 });
+test("private API responses cannot be cached and profile storage is bounded", async () => {
+  const s = new Store(":memory:");
+  for (let i = 0; i < 100; i++) s.put("device", String(i), { id: String(i) });
+  const app = await buildApp(
+    config({ ADMIN_TOKEN: token, DATA_DIR: ":memory:" }),
+    s
+  );
+  try {
+    const r = await app.inject({
+      method: "POST",
+      url: "/api/devices",
+      payload: { capabilities: {} }
+    });
+    assert.equal(r.statusCode, 429);
+    assert.equal(r.headers["cache-control"], "no-store");
+  } finally {
+    await app.close();
+  }
+});

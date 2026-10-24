@@ -1,5 +1,5 @@
 # Implementation plan
-Read all eight binding blueprint files in docs/blueprint on 2026-10-24. No earlier prototype supplied. GitHub create blocked: connector lacks operation; browser needs login. Preserve milestone commits locally for upload.
+Read all eight binding blueprint files in docs/blueprint on 2026-10-24. No earlier prototype supplied. GitHub history imported; origin/work/ps4-foundation verified at 0be31703c9453caae7a61450c09286b323c08e09 before RC changes.
 
 M0: Node 24 LTS, TypeScript, SQLite, locked dependencies, CI. Gate: build and tests.
 M1: ES5 Arabic RTL TV, spatial focus/modal restoration, controller page, persisted capabilities. Gate: browser tests + ES5 parse/budgets.
@@ -15,9 +15,10 @@ M10: security, performance, audit, runbook and honest limitations. No public hos
 
 Use vertical slices and test before each milestone commit. Native node:sqlite avoids addon build dependency; requires Node 24+. Client is vanilla ES5. Secrets server-only. Registered sources only, DNS-pinned outbound allowlist. No demo substitution on production failure. Capability existence never means verified playback. Record reductions and unfinished gates explicitly.
 
-## Resume checkpoint — 2026-10-24
-- Existing branch work/ps4-foundation and nine M0–M8 commits retained unchanged. No reset/rebase/reinitialization.
-- Repository anineghost-png/aseel-match-tv verified private with push permission. origin configured. Git CLI authentication is the remaining upload blocker; no remote commits/branches claimed.
-- Original history and staged files checked for secrets; ignore rules expanded.
-- M0/M1 desktop gates already passed; validate only, do not rebuild. M2–M8 contain implemented slices with explicit integration gaps in KNOWN_LIMITATIONS. M9 blocked on hardware. M10 LAN hardening in progress, not production signoff.
-- Next: authenticated push of exact commits; compare remote branch SHA and tree; then complete remaining M10 checks. Physical M9 cannot be automated here.
+## RC1 scope — 2026-10-24
+- M0–M8: preserve existing implementation/evidence; do not rebuild.
+- Synced exact remote commit 0be31703c9453caae7a61450c09286b323c08e09 by verified Git objects and fast-forward; native git fetch had no credentials. CI FFmpeg fix retained.
+- M10 only: portable media generation, two-command LAN startup, printed PS4 URL candidates, bounded device storage, no-store API responses, orderly worker shutdown, initial network error state, stricter ES5 asset budgets, current runbook.
+- Final gates: npm run check; npm run media; npm run test:browser; npm audit; history/secret check; parent-preserving commit publication and green GitHub Actions.
+- M9: pending physical PS4. Follow docs/PS4_ACCEPTANCE.md; do not declare video/controller/fullscreen/soak successful from desktop evidence.
+- No optional feature expansion; known provider/codec and trusted-LAN limitations remain explicit.

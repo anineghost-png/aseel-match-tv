@@ -131,7 +131,13 @@ export function startWorker(store: Store, net: SafeNet) {
       busy = false;
     }
   };
-  const timer = setInterval(() => void tick(), 60000);
+  let running: Promise<void> = Promise.resolve();
+  const timer = setInterval(() => {
+    if (!busy) running = tick();
+  }, 60000);
   timer.unref();
-  return () => clearInterval(timer);
+  return async () => {
+    clearInterval(timer);
+    await running;
+  };
 }

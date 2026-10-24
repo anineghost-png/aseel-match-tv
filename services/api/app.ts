@@ -49,6 +49,7 @@ export async function buildApp(cfg: Config, store = new Store(cfg.DATA_DIR)) {
         "Content-Security-Policy",
         "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self'; worker-src blob:; object-src 'none'; frame-ancestors 'none'; base-uri 'none'"
       );
+    if (req.url.startsWith("/api/")) reply.header("Cache-Control", "no-store");
     if (
       req.method !== "GET" &&
       req.headers.origin &&
@@ -229,6 +230,8 @@ export async function buildApp(cfg: Config, store = new Store(cfg.DATA_DIR)) {
   app.post("/api/devices", async (req, reply) => {
     const body = device.parse(req.body),
       id = randomUUID();
+    if (store.all("device").length >= 100)
+      return reply.code(429).send({ error: "DEVICE_LIMIT" });
     store.put("device", id, {
       id,
       capabilities: body.capabilities,

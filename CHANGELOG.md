@@ -24,3 +24,10 @@ Threadfin-compatible authorized upstream refresh contract and removed-source dis
 - Dependency audit: zero known vulnerabilities after pinned upgrades. 31 unit/integration tests and 6 browser tests pass; actual codec-playback test skipped explicitly.
 - Expanded secret/playlist exclusions and added history/staging scanner.
 - Verified target repository is private and configured origin. Exact-history push still requires Git CLI authentication; connector-created replacement commits would change original SHAs and are not used.
+
+## RC1 — M10 LAN software readiness
+- Preserve original history and synchronize exact 0be3170 base; retain green-CI FFmpeg installation.
+- Two-command PS4 preparation, portable FFmpeg invocation and printed LAN URL candidates.
+- Bounded device profiles, no-store API responses, token format validation and graceful worker drain.
+- Actionable initial network error, ES5 40KB total TV JS / 12KB CSS ceilings, updated current-state documentation.
+- M9 hardware acceptance remains explicitly pending; no real IPTV credentials used.

@@ -17,7 +17,7 @@
 - PS4 native HLS/MSE, real controller behavior/fullscreen, 30-minute real-time refresh and two-hour soak: pending real device.
 - Authorized external IPTV and real football API: no credentials supplied, not exercised.
 - Actual Threadfin application/version: not exercised; exported M3U/XMLTV contract tested locally.
-- GitHub push and remote SHA equality: blocked by missing Git CLI authentication, despite private repo and connector push permission being verified.
+- GitHub history imported and remote base SHA 0be31703c9453caae7a61450c09286b323c08e09 verified locally; CI FFmpeg fix retained. RC results below supersede checkpoint counts.
 
 ## Milestone status
 | Milestone | Evidence/status |
@@ -30,3 +30,13 @@
 | M8 | Optional upstream contract tested; actual Threadfin unverified |
 | M9 | BLOCKED — physical PS4 required |
 | M10 | LAN hardening checkpoint; not complete production release |
+
+## RC1 final verification
+Results recorded after the single final test sequence. PS4 acceptance remains PENDING.
+
+- Final RC1 sequence: `npm run check` **32 passed / 0 failed**, TypeScript passed; `npm run media` generated local legal H264/AAC test video successfully; `npm run test:browser` **7 passed / 0 failed / 1 skipped**; `npm audit` **0 vulnerabilities**.
+- Browser binary was initially absent in this refreshed environment. Installed the pinned Playwright Chromium and resumed the browser/audit portion only; no repeated application build/test cycle was required.
+- Skipped: actual H264/AAC decode in this Chromium. Codec failure never records successful verification. Physical PS4 remains unverified.
+- Tightened enforced ceilings: all first-party TV JavaScript <40KB, CSS <12KB; ES5 parse and 1080p/720p layout/DOM checks passed.
+- RC1 adds bounded profile storage/no-store tests and actionable initial network-failure browser coverage.
+- M10 LAN RC scope closed for software testing; publication requires a green Actions run attached to the RC commit. M9 hardware signoff remains separate.
