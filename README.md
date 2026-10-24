@@ -1,95 +1,99 @@
-# ASEEL MATCH TV — V1 Product Pass
+# ASEEL MATCH TV
 
-واجهة عربية RTL لمتابعة مباريات كرة القدم بأسلوب **match-first**، مبنية لمتصفح PS4 ويد DUALSHOCK 4. الأساس التقني M0–M8 مكتمل آليًا، وفي 24 أكتوبر 2026 تم التحقق على PS4 حقيقي من فتح الواجهة، التحكم باليد، وتشغيل فيديو H264/AAC مع الصوت. ما زالت عناصر M9 الطويلة مثل البث المصرح به، failover والـsoak مطلوبة قبل إعلان v1 نهائيًا.
+Arabic RTL, match-first football hub designed for the PlayStation 4 browser and DUALSHOCK 4.
 
-مصدر الحقيقة: `anineghost-png/aseel-match-tv`.
+## Current status — V1 Product Pass
 
-## ما الذي صار جاهزًا
+- Source of truth: `anineghost-png/aseel-match-tv`
+- Production branch: `main`
+- Hosted PS4 smoke URL: `https://aseel-match-tv.vercel.app`
+- Hosted smoke health: `/api/health`
+- Hosted smoke mode is intentionally `DEMO_MODE=true` until a real sports-data credential and an authorized viewing source are configured.
+- The hosted smoke deployment provides the production TV shell, controller navigation, device-registration compatibility page, and safe playback refusal when no authorized source exists.
+- The full persistent Node backend remains the source implementation for authorized M3U/XMLTV import, media validation, ranking, gateway playback and failover.
 
-- واجهة TV عربية RTL محسنة للاستخدام من مسافة بعيدة.
-- شاشة مباراة بارزة، مباشر الآن، برشلونة، مباريات اليوم، الليغا، دوري الأبطال والدوريات الخمس.
-- دعم Football-Data.org وAPI-Football للبيانات الحقيقية.
-- استيراد M3U/XMLTV **المصرح بها فقط** من لوحة الإدارة.
-- مطابقة المباريات بالقنوات، فحص صحة المصادر، ترتيبها، وفشل احتياطي تلقائي.
-- بوابة مشاهدة تخفي روابط المزوّد عن متصفح TV.
-- `/compat` و`/controller` واختبار فيديو H264/AAC محلي.
-- Dockerfile و`railway.json` للاستضافة الدائمة بدل الاعتماد على هاتف أو كمبيوتر داخل المنزل.
+## Verified physical PS4 evidence
 
-## تشغيل محلي سريع
+The following were verified on a real PS4 browser during M9 physical testing:
 
-المتطلبات: Node.js 24+ وnpm وFFmpeg.
+- ASEEL MATCH TV opened over LAN.
+- DUALSHOCK 4 navigation/select/back worked.
+- `/compat` local H264/AAC HLS test played with audio and advanced beyond the acceptance threshold.
+- Home navigation, opening a match card and closing the viewer worked.
 
-```sh
+See `docs/PS4_ACCEPTANCE.md` for the recorded evidence and the remaining M9 items.
+
+## Hosted architecture
+
+The final user experience is intended to be:
+
+1. Turn on PS4.
+2. Open one permanent HTTPS ASEEL MATCH TV URL.
+3. Browse matches in Arabic with the controller.
+4. Open a match and let ASEEL select the best confirmed authorized source.
+
+The PS4 must not depend on a phone, Termux or laptop for normal daily runtime.
+
+### Current Vercel smoke deployment
+
+Vercel currently hosts the public TV shell and stateless smoke endpoints so the permanent HTTPS path can be tested on PS4 without A9/Termux. This is not the final persistent media gateway: Vercel's serverless runtime is intentionally not used to proxy full match streams or preserve the on-disk catalog.
+
+For the complete backend deployment, use a persistent Node host with writable persistent storage and FFmpeg available. The repository includes `Dockerfile` for that deployment model.
+
+## Environment variables
+
+Copy `.env.example` to `.env` for local or persistent-host deployment. Never commit secrets.
+
+Required for the full backend:
+
+- `HOST=0.0.0.0`
+- `PORT` — usually supplied by the hosting provider; local default is 3000.
+- `ADMIN_TOKEN` — random 32+ printable ASCII secret.
+- `DEMO_MODE=true|false`
+- `DATA_DIR=/data` on a persistent host.
+- `MEDIA_ALLOWED_HOSTS` — comma-separated domains belonging only to authorized viewing providers.
+- `MEDIA_LAN_HOSTS` — normally empty in cloud hosting.
+
+Sports data (choose one):
+
+- `FOOTBALL_DATA_API_KEY`
+- `API_FOOTBALL_KEY`
+
+## Authorized media only
+
+ASEEL MATCH TV does not discover, bundle or bypass protected pay-TV streams. Media is imported only from a source the operator is authorized to use, through the Admin interface/API. Provider URLs and credentials must remain server-side and must never be exposed in the TV UI or committed to Git.
+
+The backend supports authorized M3U/XMLTV imports, conservative match-to-channel mapping, source health probes, ranking, opaque playback URLs and controlled fallback.
+
+## Local development
+
+```bash
 npm ci
-npm run ps4
-```
-
-يفعّل الأمر الاستماع على الشبكة المحلية، يبني التطبيق، يولّد فيديو اختبار قانونيًا ويشغّل الخادم. افتح العنوان المطبوع بجانب `PS4 candidate URL`.
-
-للتشغيلات اللاحقة:
-
-```sh
+npm run check
+npm run media
 npm start
 ```
 
-## الاستضافة الدائمة
+Open:
 
-الهدف النهائي هو أن يحتاج PS4 إلى رابط HTTPS ثابت فقط، بدون Termux أو A9 أو كمبيوتر يعمل باستمرار. المستودع يحتوي Dockerfile إنتاجي مبني على Node 24 مع FFmpeg، وتهيئة Railway مع `/health`.
+- TV: `http://localhost:3000/`
+- Compatibility: `http://localhost:3000/compat`
+- Controller test: `http://localhost:3000/controller`
+- Admin: `http://localhost:3000/admin`
 
-متغيرات البيئة المطلوبة على الخادم:
+## Docker
 
-```env
-HOST=0.0.0.0
-ADMIN_TOKEN=<random-32+-chars>
-DEMO_MODE=false
-DATA_DIR=/data
-FOOTBALL_DATA_API_KEY=<optional-preferred>
-API_FOOTBALL_KEY=<optional-alternative>
-MEDIA_ALLOWED_HOSTS=<authorized-provider-hosts-comma-separated>
-MEDIA_LAN_HOSTS=
+```bash
+docker build -t aseel-match-tv .
+docker run --rm -p 3000:3000 \
+  -e ADMIN_TOKEN='replace-me-with-a-long-random-secret' \
+  -e DEMO_MODE=true \
+  -v aseel-data:/data \
+  aseel-match-tv
 ```
 
-`PORT` يوفّره مزود الاستضافة تلقائيًا عادةً. استخدم Volume دائمًا على `/data` حتى تبقى الأجهزة والمصادر والمطابقات بعد إعادة النشر.
+For a persistent host, mount a volume at `/data`.
 
-### البيانات الحقيقية
+## Tests
 
-عند وجود `FOOTBALL_DATA_API_KEY` يستخدمه الخادم تلقائيًا. إذا لم يوجد ويُضبط `API_FOOTBALL_KEY` يستخدم API-Football. بدون مفتاح رياضي و`DEMO_MODE=false` يعرض النظام آخر بيانات محفوظة فقط ولا يختلق مباريات.
-
-### مصادر المشاهدة
-
-افتح `/admin` وأدخل `ADMIN_TOKEN` ثم استورد M3U/XMLTV أو رابط المزوّد الذي لديك صلاحية استخدامه. يجب وضع أسماء نطاقات المزوّد في `MEDIA_ALLOWED_HOSTS` قبل الاستيراد. لا تحفظ أي قائمة أو كلمة مرور في GitHub.
-
-ASEEL لا يبحث عن بث مدفوع غير مصرح به ولا يتجاوز DRM. التشغيل يعتمد فقط على المصادر التي تضيفها وتؤكد صلاحيتك عليها.
-
-## المسارات
-
-- `/` واجهة التلفزيون.
-- `/compat` فحص توافق الجهاز واختبار الفيديو.
-- `/controller` اختبار D-pad وX/O.
-- `/admin` استيراد المصادر، المطابقة والتشخيص.
-- `/health` فحص جاهزية الخادم بدون أسرار.
-
-## التحقق
-
-```sh
-npm run check
-npm run media
-npm run test:browser
-npm audit
-```
-
-اختبارات H264/AAC على Chromium قد تُتخطى إذا كانت نسخة المتصفح بلا codecs؛ الاختبار الفيزيائي على PS4 هو المرجع لتوافق PS4.
-
-## حالة PS4
-
-تم فعليًا على جهاز PS4 حقيقي:
-
-- فتح التطبيق من الشبكة: PASS.
-- التحكم باليد: PASS.
-- الفيديو المحلي H264: PASS.
-- الصوت AAC: PASS.
-- فتح وإغلاق بطاقات المباراة والتنقل الأساسي: PASS.
-
-الباقي موثق في `docs/PS4_ACCEPTANCE.md`: بث مصرح فعلي، failover مضبوط، اختبار 30 دقيقة، soak لساعتين، وفشل API مع cache.
-
-التفاصيل الهندسية: `TEST_RESULTS.md`, `KNOWN_LIMITATIONS.md`, `IMPLEMENTATION_PLAN.md`, `docs/SECURITY.md`. المواصفات الأصلية محفوظة في `docs/blueprint`.
+The CI pipeline runs TypeScript build/checks, unit/integration tests, FFmpeg media generation and browser tests. PS4-specific acceptance still includes real-device checks that automation cannot replace.
