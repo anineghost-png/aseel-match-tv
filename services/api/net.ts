@@ -132,4 +132,92 @@ export class SafeNet {
       });
     });
   }
+  async post(
+    raw: string,
+    body: string,
+    maxBytes = 2e6,
+    timeout = 8000,
+    redirects = 0
+  ): Promise<FetchResult> {
+    const { u, address } = await this.validate(raw),
+      start = performance.now(),
+      encoded = Buffer.from(body, "utf8");
+    return new Promise((resolve, reject) => {
+      let done = false;
+      const finish = (e: Error) => {
+        if (!done) {
+          done = true;
+          reject(e);
+        }
+      };
+      const request = (u.protocol === "https:" ? https : http).request(
+        u,
+        {
+          method: "POST",
+          lookup: ((_h: any, _o: any, cb: any) => cb(null, address, 4)) as any,
+          headers: {
+            "User-Agent": "ASEEL-MATCH-TV/0.1",
+            "Accept-Encoding": "identity",
+            "Content-Type": "application/json; charset=utf-8",
+            "Content-Length": encoded.length
+          }
+        },
+        (res) => {
+          const firstByteMs = performance.now() - start,
+            status = res.statusCode || 0;
+          if (status >= 300 && status < 400) {
+            res.resume();
+            clearTimeout(timer);
+            request.destroy();
+            if (redirects >= 3 || !res.headers.location) {
+              finish(Error("REDIRECT_LIMIT"));
+              return;
+            }
+            this.post(
+              new URL(res.headers.location, u).href,
+              body,
+              maxBytes,
+              timeout,
+              redirects + 1
+            ).then(resolve, reject);
+            return;
+          }
+          const chunks: Buffer[] = [];
+          let size = 0;
+          res.on("data", (chunk: Buffer) => {
+            size += chunk.length;
+            if (size > maxBytes) {
+              res.destroy();
+              request.destroy();
+              finish(Error("SIZE_LIMIT"));
+            } else chunks.push(chunk);
+          });
+          res.on("error", () => finish(Error("NETWORK_ERROR")));
+          res.on("end", () => {
+            clearTimeout(timer);
+            if (!done) {
+              done = true;
+              resolve({
+                body: Buffer.concat(chunks),
+                status,
+                firstByteMs,
+                elapsedMs: performance.now() - start,
+                url: u.href,
+                headers: res.headers
+              });
+            }
+          });
+        }
+      );
+      const timer = setTimeout(() => {
+        request.destroy();
+        finish(Error("TIMEOUT"));
+      }, timeout);
+      request.on("error", () => {
+        clearTimeout(timer);
+        finish(Error("NETWORK_ERROR"));
+      });
+      request.end(encoded);
+    });
+  }
 }
