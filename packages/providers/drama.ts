@@ -42,6 +42,16 @@ const buildXtreamPlaylist = (base: string, username: string, password: string) =
   return url;
 };
 
+const normalizeLegacyXtreamRelay = (url: URL) => {
+  if (!/(^|\.)mikkm\.xyz$/i.test(url.hostname)) return null;
+  if (!/\/android\/androidApi\.php$/i.test(url.pathname)) return null;
+  const server = url.searchParams.get("url") || "";
+  const username = url.searchParams.get("username") || "";
+  const password = url.searchParams.get("password") || "";
+  if (!server || !username || !password) return null;
+  return buildXtreamPlaylist(server, username, password);
+};
+
 export function parseDramaShare(input: string): DramaSource {
   if (!input || input.length > 8192 || input.includes("\0"))
     throw Error("DRAMA_SHARE_INVALID");
@@ -83,13 +93,20 @@ export function parseDramaShare(input: string): DramaSource {
     } catch {
       continue;
     }
+    const directXtream = normalizeLegacyXtreamRelay(url);
+    if (directXtream)
+      return {
+        kind: "xtream",
+        m3uUrl: directXtream.href,
+        host: directXtream.hostname
+      };
+
     const lower = url.href.toLowerCase();
     const fg = /(^|\.)fgcode\.(?:store|org|com)$/i.test(url.hostname);
     const playlist =
-      fg ||
       /(?:\.m3u8?|\/get\.php)(?:$|[?#])/i.test(url.pathname + url.search) ||
       /(?:m3u|playlist|source)/i.test(lower);
-    if (playlist)
+    if (fg || playlist)
       return {
         kind: fg ? "fg" : "m3u",
         m3uUrl: url.href,
