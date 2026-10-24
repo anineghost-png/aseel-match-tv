@@ -9,3 +9,5 @@ Sports adapters, normalized fixtures and explicit demo, persisted quota reserve/
 M3U deduplication/lineage, chunked SAX XMLTV parser with DTD rejection and rolling window, DNS-pinned outbound allowlist and bounded fetches. Eleven tests passed.
 ## M4
 Conservative bilingual evidence scorer, persistent review/rules, admin onboarding and diagnostic UI. Eighteen tests passed; wrong simultaneous teams and stale EPG cannot auto-confirm.
+## M5
+Bounded HLS manifest/segment probing, measured throughput/TTFB, history and weighted ranking. Controlled HTTP stable/dead tests passed (21 total).
