@@ -175,42 +175,24 @@ export class ApiFootball implements SportsProvider {
   }
 }
 export function demoFixtures(now = Date.now()): Fixture[] {
-  return [
-    {
-      id: 1,
-      home: "Barcelona",
-      away: "Real Madrid",
-      code: "PD",
-      status: "LIVE",
-      h: 2,
-      a: 1
-    },
-    {
-      id: 2,
-      home: "Atletico Madrid",
-      away: "Sevilla",
-      code: "PD",
-      status: "SCHEDULED",
-      h: null,
-      a: null
-    },
-    {
-      id: 3,
-      home: "Arsenal",
-      away: "Inter",
-      code: "CL",
-      status: "SCHEDULED",
-      h: null,
-      a: null
-    }
-  ].map((m) => ({
+  const slate = [
+    { id: 1, home: "Barcelona", away: "Real Madrid", code: "PD", status: "LIVE", h: 2, a: 1, offset: 0 },
+    { id: 2, home: "Atletico Madrid", away: "Sevilla", code: "PD", status: "SCHEDULED", h: null, a: null, offset: 1 },
+    { id: 3, home: "Arsenal", away: "Inter", code: "CL", status: "SCHEDULED", h: null, a: null, offset: 2 },
+    { id: 4, home: "Liverpool", away: "Manchester City", code: "PL", status: "SCHEDULED", h: null, a: null, offset: 3 },
+    { id: 5, home: "Bayern Munich", away: "Borussia Dortmund", code: "BL1", status: "SCHEDULED", h: null, a: null, offset: 4 },
+    { id: 6, home: "Juventus", away: "AC Milan", code: "SA", status: "SCHEDULED", h: null, a: null, offset: 5 },
+    { id: 7, home: "Paris Saint-Germain", away: "Marseille", code: "FL1", status: "SCHEDULED", h: null, a: null, offset: 6 },
+    { id: 8, home: "Barcelona", away: "Arsenal", code: "CL", status: "SCHEDULED", h: null, a: null, offset: 7 }
+  ];
+  return slate.map((m) => ({
     ...base(
       m,
       "demo",
       m.code,
       m.home,
       m.away,
-      new Date(now + (m.id - 1) * 3600000).toISOString(),
+      new Date(now + m.offset * 3600000).toISOString(),
       m.status,
       m.h,
       m.a
