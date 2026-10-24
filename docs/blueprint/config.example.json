@@ -1,0 +1,54 @@
+{
+  "app": {
+    "name": "ASEEL MATCH TV",
+    "locale": "ar-IQ",
+    "timezone": "Asia/Baghdad"
+  },
+  "preferences": {
+    "favoriteTeams": [
+      "FC Barcelona"
+    ],
+    "competitionPriority": [
+      "La Liga",
+      "UEFA Champions League",
+      "Premier League",
+      "Serie A",
+      "Bundesliga",
+      "Ligue 1"
+    ]
+  },
+  "sportsProviders": {
+    "footballData": {
+      "enabled": true,
+      "apiKeyEnv": "FOOTBALL_DATA_API_KEY"
+    },
+    "apiFootball": {
+      "enabled": false,
+      "apiKeyEnv": "API_FOOTBALL_KEY",
+      "freeDailyLimit": 100,
+      "reservePercent": 15
+    },
+    "theSportsDb": {
+      "enabled": false
+    }
+  },
+  "media": {
+    "authorizedOnly": true,
+    "m3u": [],
+    "xmltv": [],
+    "threadfin": {
+      "enabled": false,
+      "baseUrl": ""
+    }
+  },
+  "mapping": {
+    "autoConfirmThreshold": 85,
+    "reviewThreshold": 70
+  },
+  "health": {
+    "prewarmMinutes": 15,
+    "fallbackCount": 2,
+    "probeTimeoutMs": 5000,
+    "failedSourceCooldownSeconds": 180
+  }
+}
