@@ -1,6 +1,7 @@
 import { visibleFixtures } from "../../packages/core/fixtures.js";
 import { startWorker, refreshCatalog } from "../worker/jobs.js";
 import { playbackRoutes } from "./playback.js";
+import { dramaProviderRoutes } from "./drama.js";
 import Fastify from "fastify";
 import statics from "@fastify/static";
 import rateLimit from "@fastify/rate-limit";
@@ -148,6 +149,7 @@ export async function buildApp(cfg: Config, store = new Store(cfg.DATA_DIR)) {
     cfg.MEDIA_LAN_HOSTS.split(",").filter(Boolean)
   );
   playbackRoutes(app, store, net, cfg.DEMO_MODE);
+  dramaProviderRoutes(app, store, net);
   const stopWorker = startWorker(store, net);
   app.addHook("onClose", async () => stopWorker());
   const ingest = z
