@@ -27,13 +27,19 @@ export function dramaProviderRoutes(
       providerId: body.providerId,
       kind: source.kind,
       host: source.host,
+      readyToImport: source.kind !== "fg",
       secretStored: false
     };
   });
 
-  app.post("/api/admin/providers/drama", async (req) => {
+  app.post("/api/admin/providers/drama", async (req, reply) => {
     const body = bodySchema.parse(req.body);
     const source = parseDramaShare(body.text);
+    if (source.kind === "fg")
+      return reply.code(409).send({
+        error: "FG_REQUIRES_RESOLUTION",
+        host: source.host
+      });
     await net.validate(source.m3uUrl);
     await refreshCatalog(store, net, {
       id: body.providerId,
