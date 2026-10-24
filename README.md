@@ -40,6 +40,21 @@ Vercel currently hosts the public TV shell and stateless smoke endpoints so the 
 
 For the complete backend deployment, use a persistent Node host with writable persistent storage and FFmpeg available. The repository includes `Dockerfile` for that deployment model.
 
+## Drama Live bridge
+
+The persistent backend includes a dedicated handoff adapter for an operator-owned or otherwise authorized Drama Live installation.
+
+From `/admin`, **ربط Drama Live** can inspect the text produced by Drama Live's share action and recognize:
+
+- direct M3U/M3U8 sources;
+- Xtream connection details in English or Arabic;
+- legacy Drama Live Xtream relay URLs, which ASEEL normalizes to the provider's direct standard playlist instead of using the relay;
+- FG Code handoffs, which are identified separately and are not guessed to be M3U.
+
+The preview reveals only the source type and hostname. Upstream URLs and credentials remain server-side and are excluded from the TV UI and diagnostics. Add the authorized provider hostname to `MEDIA_ALLOWED_HOSTS` before importing it.
+
+See `docs/DRAMA_PROVIDER.md` for the handoff and security flow.
+
 ## Environment variables
 
 Copy `.env.example` to `.env` for local or persistent-host deployment. Never commit secrets.
