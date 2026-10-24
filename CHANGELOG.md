@@ -13,3 +13,5 @@ Conservative bilingual evidence scorer, persistent review/rules, admin onboardin
 Bounded HLS manifest/segment probing, measured throughput/TTFB, history and weighted ranking. Controlled HTTP stable/dead tests passed (21 total).
 ## M6
 Capability-gated native/HLS.js player and opaque registered-source HLS gateway; local FFmpeg H264/AAC test assets. Client-observed playback verification remains distinct from physical PS4 acceptance. Integrated authenticated ingestion, review, health and diagnostic routes. 23 unit/integration passed; 4 browser passed, actual H264/AAC playback skipped because installed Chromium lacks codecs. Not a playback success claim.
+## M7
+One local player retry, serialized failover requests, stale callback cancellation, source circuit cooldown, session cleanup and deterministic no-flapping selection. 25 tests passed including server failover and source URL secrecy.
