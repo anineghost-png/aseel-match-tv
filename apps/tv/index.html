@@ -7,37 +7,91 @@
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <header>
-      <a class="brand" href="/">ASEEL <strong>MATCH TV</strong></a
-      ><span class="tag">كرة القدم، في مكان واحد</span><span id="clock"></span
-      ><span id="network" class="badge">جارٍ الاتصال</span>
-    </header>
-    <main>
-      <div id="demo" class="notice" hidden>
-        وضع تجريبي — المباريات والنتائج المعروضة أمثلة وليست بيانات حقيقية
+    <div class="ambient ambient-a" aria-hidden="true"></div>
+    <div class="ambient ambient-b" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="ASEEL MATCH TV">
+        <span class="brand-mark">A</span>
+        <span class="brand-copy">ASEEL <strong>MATCH TV</strong></span>
+      </a>
+      <span class="tag">ملعبك يبدأ من هنا</span>
+      <div class="topbar-status">
+        <span id="clock" class="clock"></span>
+        <span id="network" class="badge"><i></i> جارٍ الاتصال</span>
       </div>
-      <section class="hero">
-        <p class="eyebrow">ليلتك الكروية تبدأ هنا</p>
-        <h1 id="hero-title">كل الأنظار نحو الملعب.</h1>
-        <p id="hero-detail">برشلونة أولًا. ثم كل المباريات التي تهمّك.</p>
-        <button id="hero-open" hidden>تفاصيل المباراة</button
-        ><a class="secondary" href="/compat">فحص توافق جهازك</a>
-        <div class="pitch" aria-hidden="true"><i></i></div>
+    </header>
+
+    <main class="shell">
+      <div id="demo" class="notice" hidden>
+        <strong>وضع العرض</strong>
+        <span>المباريات والنتائج الحالية أمثلة إلى أن تضيف مزود بيانات حقيقي.</span>
+      </div>
+
+      <section class="hero" aria-label="المباراة الأبرز">
+        <div class="hero-copy">
+          <div class="hero-kicker">
+            <span class="live-dot"></span>
+            <span id="hero-status">المباراة الأبرز</span>
+          </div>
+          <p class="eyebrow">ASEEL MATCH CENTER</p>
+          <h1 id="hero-title">كل الأنظار نحو الملعب.</h1>
+          <p id="hero-detail" class="hero-detail">
+            برشلونة أولًا، ثم كل المباريات التي تهمّك في شاشة واحدة.
+          </p>
+          <div class="hero-actions">
+            <button id="hero-open" class="primary" hidden>فتح المباراة</button>
+            <a class="secondary" href="/compat">فحص توافق الجهاز</a>
+          </div>
+        </div>
+
+        <div class="hero-board" aria-hidden="true">
+          <div class="competition-chip" id="hero-competition">MATCH NIGHT</div>
+          <div class="versus">
+            <div class="hero-team">
+              <span class="crest crest-home" id="hero-home-crest">B</span>
+              <strong id="hero-home">برشلونة</strong>
+            </div>
+            <div class="hero-score-wrap">
+              <span id="hero-score" class="hero-score">VS</span>
+              <small id="hero-kickoff">بتوقيت بغداد</small>
+            </div>
+            <div class="hero-team">
+              <span class="crest crest-away" id="hero-away-crest">R</span>
+              <strong id="hero-away">ريال مدريد</strong>
+            </div>
+          </div>
+          <div class="stadium-lines"><i></i><b></b></div>
+        </div>
       </section>
-      <nav aria-label="الأقسام">
-        <a href="#live">مباشر الآن</a><a href="#barca">برشلونة</a
-        ><a href="#today">مباريات اليوم</a><a href="#liga">الدوري الإسباني</a
-        ><a href="#champions">دوري الأبطال</a
-        ><a href="#europe">الدوريات الخمس</a>
+
+      <section class="pulse" aria-label="ملخص اليوم">
+        <div class="pulse-card"><span>مباشر الآن</span><strong id="stat-live">0</strong></div>
+        <div class="pulse-card"><span>مباريات اليوم</span><strong id="stat-today">0</strong></div>
+        <div class="pulse-card"><span>برشلونة</span><strong id="stat-favorite">—</strong></div>
+        <div class="pulse-card accent"><span>وضع المشاهدة</span><strong>PS4</strong></div>
+      </section>
+
+      <nav class="section-nav" aria-label="الأقسام">
+        <a href="#live"><span>●</span> مباشر الآن</a>
+        <a href="#barca">برشلونة</a>
+        <a href="#today">مباريات اليوم</a>
+        <a href="#liga">الدوري الإسباني</a>
+        <a href="#champions">دوري الأبطال</a>
+        <a href="#europe">الدوريات الخمس</a>
       </nav>
-      <div id="rows"></div>
-      <p id="empty">جارٍ تحميل المباريات…</p>
+
+      <div id="rows" class="match-rows"></div>
+      <p id="empty" class="empty">جارٍ تحميل المباريات…</p>
     </main>
-    <footer>
-      <span>✕ اختيار</span><span>○ رجوع</span
-      ><span>الأسهم للتنقل · التوقيت: بغداد</span
-      ><a href="/controller">اختبار التحكم</a>
+
+    <footer class="controller-bar">
+      <div><span class="key key-x">✕</span> اختيار</div>
+      <div><span class="key key-o">○</span> رجوع</div>
+      <div>الأسهم للتنقل</div>
+      <div class="controller-spacer">التوقيت: بغداد</div>
+      <a href="/controller">اختبار التحكم</a>
     </footer>
+
     <section
       id="modal"
       class="overlay"
@@ -47,17 +101,28 @@
       hidden
     >
       <div class="dialog">
-        <button id="close">إغلاق ×</button>
-        <p id="match-league" class="eyebrow"></p>
-        <h2 id="match-title"></h2>
-        <p id="match-score"></p>
-        <p id="match-time"></p>
-        <p id="match-freshness"></p>
-        <button id="watch">شاهد الآن</button>
-        <p id="play-status" role="status"></p>
+        <div class="dialog-head">
+          <div>
+            <p id="match-league" class="eyebrow"></p>
+            <h2 id="match-title"></h2>
+          </div>
+          <button id="close" class="close">إغلاق ×</button>
+        </div>
+        <div class="match-summary">
+          <div class="summary-score" id="match-score"></div>
+          <div class="summary-meta">
+            <p id="match-time"></p>
+            <p id="match-freshness"></p>
+          </div>
+        </div>
+        <div class="watch-row">
+          <button id="watch" class="primary watch-button">شاهد الآن</button>
+          <p id="play-status" class="play-status" role="status"></p>
+        </div>
         <video id="video" controls playsinline></video>
       </div>
     </section>
+
     <script src="/common.js"></script>
     <script src="/focus.js"></script>
     <script src="/player.js"></script>
