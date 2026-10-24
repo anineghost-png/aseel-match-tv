@@ -1,0 +1,1 @@
+(function(){var buttons=document.querySelectorAll('button'),i;for(i=0;i<buttons.length;i++)buttons[i].onclick=function(){Aseel.text('controller-result','تم اختيار '+this.textContent);};document.addEventListener('keydown',function(e){Aseel.text('controller-result','رمز المفتاح المستلم: '+e.keyCode);});})();
