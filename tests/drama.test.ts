@@ -9,11 +9,10 @@ test("Drama handoff accepts direct M3U URL", () => {
   assert.equal(source.m3uUrl, "https://media.example.com/list.m3u");
 });
 
-test("Drama handoff accepts bare FG Code URL", () => {
+test("Drama handoff identifies FG Code URL without treating it as M3U", () => {
   const source = parseDramaShare("fgcode.store/my-private-code");
   assert.equal(source.kind, "fg");
   assert.equal(source.host, "fgcode.store");
-  assert.equal(source.m3uUrl, "http://fgcode.store/my-private-code");
 });
 
 test("Drama handoff converts Xtream share text to an M3U playlist", () => {
@@ -28,6 +27,19 @@ test("Drama handoff converts Xtream share text to an M3U playlist", () => {
   assert.equal(url.searchParams.get("password"), "secret-value");
   assert.equal(url.searchParams.get("type"), "m3u_plus");
   assert.equal(url.searchParams.get("output"), "ts");
+});
+
+test("Drama handoff removes the legacy relay from Xtream share URLs", () => {
+  const source = parseDramaShare(
+    "http://mikkm.xyz/android/androidApi.php?url=https://tv.example.com:8443/&mode=live&username=aseel&password=private"
+  );
+  const url = new URL(source.m3uUrl);
+  assert.equal(source.kind, "xtream");
+  assert.equal(source.host, "tv.example.com");
+  assert.equal(url.origin, "https://tv.example.com:8443");
+  assert.equal(url.pathname, "/get.php");
+  assert.equal(url.searchParams.get("username"), "aseel");
+  assert.equal(url.searchParams.get("password"), "private");
 });
 
 test("Drama handoff understands Arabic Xtream labels", () => {
