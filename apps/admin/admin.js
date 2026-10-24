@@ -18,7 +18,10 @@
         result = {};
       }
       if (x.status >= 400) {
-        status("تعذرت العملية: " + (result.error || x.status));
+        var message = result.error || x.status;
+        if (message === "FG_REQUIRES_RESOLUTION")
+          message = "تم التعرف على FG، ويحتاج رابط المصدر الفعلي من مشاركة Drama Live قبل الاستيراد";
+        status("تعذرت العملية: " + message);
         return;
       }
       cb(result);
@@ -96,8 +99,9 @@
     }
     call("providers/drama" + (action === "preview" ? "/preview" : ""), data, function (r) {
       if (action === "preview") {
-        result.textContent =
-          "تم التعرف على المصدر: " + r.kind + " · المضيف: " + r.host;
+        result.textContent = r.readyToImport
+          ? "تم التعرف على المصدر: " + r.kind + " · المضيف: " + r.host + " · جاهز للربط"
+          : "تم التعرف على FG · نحتاج مشاركة المصدر الفعلي من Drama Live لإكمال الربط";
         return;
       }
       result.textContent =
