@@ -4,6 +4,7 @@ import { parseDramaShare } from "../../packages/providers/drama.js";
 import { refreshCatalog } from "../worker/jobs.js";
 import type { Store } from "./store.js";
 import type { SafeNet } from "./net.js";
+import { registerDramaDirect } from "./drama-direct.js";
 
 const bodySchema = z.object({
   providerId: z
@@ -62,4 +63,6 @@ export function dramaProviderRoutes(
         .filter((item) => item.providerId === body.providerId).length
     };
   });
+
+  registerDramaDirect(app, store, net);
 }
