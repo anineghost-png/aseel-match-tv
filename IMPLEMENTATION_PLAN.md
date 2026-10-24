@@ -14,3 +14,10 @@ M9: BLOCKED on physical PS4. Produce checklist/evidence template; continue indep
 M10: security, performance, audit, runbook and honest limitations. No public hosted deployment.
 
 Use vertical slices and test before each milestone commit. Native node:sqlite avoids addon build dependency; requires Node 24+. Client is vanilla ES5. Secrets server-only. Registered sources only, DNS-pinned outbound allowlist. No demo substitution on production failure. Capability existence never means verified playback. Record reductions and unfinished gates explicitly.
+
+## Resume checkpoint — 2026-10-24
+- Existing branch work/ps4-foundation and nine M0–M8 commits retained unchanged. No reset/rebase/reinitialization.
+- Repository anineghost-png/aseel-match-tv verified private with push permission. origin configured. Git CLI authentication is the remaining upload blocker; no remote commits/branches claimed.
+- Original history and staged files checked for secrets; ignore rules expanded.
+- M0/M1 desktop gates already passed; validate only, do not rebuild. M2–M8 contain implemented slices with explicit integration gaps in KNOWN_LIMITATIONS. M9 blocked on hardware. M10 LAN hardening in progress, not production signoff.
+- Next: authenticated push of exact commits; compare remote branch SHA and tree; then complete remaining M10 checks. Physical M9 cannot be automated here.

@@ -1,3 +1,59 @@
 # ASEEL MATCH TV
-Arabic RTL football hub, targeting an unverified PS4 WebKit runtime.
-Requires Node 24+. `npm ci`, copy `.env.example` to `.env`, replace ADMIN_TOKEN with a random secret, then `npm run build && npm start`. Open http://127.0.0.1:3000. Run `npm run check`. See IMPLEMENTATION_PLAN.md.
+
+واجهة عربية RTL لمباريات كرة القدم، تستهدف متصفح PS4 ويد DUALSHOCK 4. **هذه نسخة LAN تطويرية قابلة للتشغيل، وليست إصدار v1 مقبولًا على PS4 بعد.**
+
+## التشغيل على الكمبيوتر
+يتطلب Node.js 24 LTS أو أحدث وnpm. من مجلد المشروع:
+
+```sh
+npm ci
+node scripts/setup.mjs
+npm run build
+npm start
+```
+
+افتح http://127.0.0.1:3000 . سكربت الإعداد ينشئ `.env` ومفتاح إدارة عشوائي محليًا، ويحافظ على أي إعداد موجود. على Windows يمكنك تشغيل `start-local.cmd`؛ على Linux/macOS شغّل `bash start-local.sh`.
+
+- `/` التلفزيون.
+- `/admin` لوحة الإدارة؛ اقرأ ADMIN_TOKEN محليًا من `.env` وأدخله في الصفحة. لا ترسله ولا تضعه في GitHub.
+- `/compat` فحص القدرات وحفظها واختبار الفيديو.
+- `/controller` اختبار التنقل.
+- `/health` حالة الخادم دون أسرار.
+
+## العرض على PS4
+1. اجعل الكمبيوتر وPS4 على الشبكة الموثوقة نفسها.
+2. غيّر HOST في `.env` إلى `0.0.0.0` وأعد التشغيل. اسمح بالمنفذ 3000 على الشبكة الخاصة فقط.
+3. افتح `http://عنوان-IP-الكمبيوتر:3000` من PS4 واحفظه كإشارة مرجعية.
+4. نفّذ `docs/PS4_ACCEPTANCE.md`. لا تفتح المنفذ للإنترنت.
+
+## البيانات والمصادر
+الإعداد المبدئي DEMO_MODE=true ويعرض تنبيهًا واضحًا. لتشغيل بيانات حقيقية: اجعله false، أضف FOOTBALL_DATA_API_KEY أو API_FOOTBALL_KEY محليًا، وأعد التشغيل. عند إضافة الاثنين يُستخدم football-data أساسًا؛ الدمج الحي بينهما غير منفذ. البيانات الحقيقية لا تستبدل بأمثلة عند الفشل.
+
+أضف أسماء مضيفي مصادر الوسائط المصرح بها إلى MEDIA_ALLOWED_HOSTS. للشبكة الداخلية استخدم MEDIA_LAN_HOSTS بأسماء/IP محددة فقط. استورد M3U وXMLTV من /admin بعد تأكيد صلاحية الاستخدام. ولّد المطابقات، راجع غير المؤكد، ثم افحص المصادر. راجع `docs/THREADFIN.md` للتحديث المجدول عبر الروابط.
+
+لا يفتح المشغّل مصدرًا ما لم تكن المطابقة مؤكدة وصحة المصدر حديثة وملف الجهاز متحققًا من التشغيل. بوابة HLS تخفي بيانات المزوّد عن التلفزيون؛ لا تُحوّل الترميز ولا تتجاوز DRM.
+
+## فيديو اختبار قانوني محلي
+بعد تثبيت FFmpeg من مصدره الرسمي:
+
+```sh
+npm run media
+```
+
+يولّد أشرطة اختبار 720p H264/AAC بلا محتوى خارجي، داخل data/test-media. من /compat احفظ الفحص ثم جرّب HLS الأصلي أو HLS.js. يُحفظ تقدم الفيديو بعد 3 ثوانٍ كدليل متصفح فقط، وليس قبول PS4 كاملًا.
+
+## الاختبارات
+```sh
+npm run check
+npx playwright install chromium
+npm run media
+npm run test:browser
+npm audit
+```
+
+اختبار التشغيل الفعلي يُتخطّى صراحة إذا كان Chromium لا يدعم H264/AAC، مع اختبار مستقل يؤكد عدم تسجيل نجاح وهمي. انظر TEST_RESULTS.md. الخادم/المصادر التجريبية المحلية لا تعني اختبار مزوّد حقيقي.
+
+## الوثائق
+IMPLEMENTATION_PLAN.md · DECISIONS.md · CHANGELOG.md · KNOWN_LIMITATIONS.md · docs/SECURITY.md · docs/PS4_ACCEPTANCE.md. المواصفات الأصلية محفوظة دون تعديل في docs/blueprint.
+
+المستودع الخاص موجود على https://github.com/anineghost-png/aseel-match-tv وتم ربطه باسم origin. رفع تاريخ Git الأصلي متوقف حاليًا لأن الطرفية لا تملك مصادقة GitHub. لا توجد دعوى بأن رفعًا قد نجح. تاريخ Git المحلي محفوظ؛ بعد توفير مصادقة Git يمكن تشغيل `git push -u origin --all` دون إعادة إنشاء commits.

@@ -1,1 +1,70 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إدارة ASEEL MATCH TV</title><link rel="stylesheet" href="/style.css"></head><body><main><a href="/">التلفزيون</a><h1>لوحة الإدارة</h1><p>المفتاح يبقى في ذاكرة هذه الصفحة فقط. استخدم هذه اللوحة داخل شبكة موثوقة.</p><label>مفتاح الإدارة <input id="token" type="password" autocomplete="off"></label><button id="connect">فتح التشخيص</button><p id="status" role="status"></p><section><h2>الإعداد الأول</h2><ol><li>أضف مفاتيح البيانات إلى .env وأعد التشغيل.</li><li>استورد قائمة المشاهدة المصرح بها ودليل البرامج أدناه.</li><li>راجع القنوات ثم ولّد مطابقة المباريات.</li><li>راجع المطابقات غير المؤكدة قبل السماح بالتشغيل.</li><li>افتح /compat على PS4 ثم نفّذ اختبار الفيديو.</li></ol><label>معرّف المزوّد <input id="provider" value="personal"></label><label>النوع <select id="kind"><option value="m3u">M3U</option><option value="xmltv">XMLTV</option></select></label><label>ملف محلي <input id="file" type="file" accept=".m3u,.m3u8,.xml,.xmltv,.txt"></label><label>المحتوى <textarea id="content"></textarea></label><label>أو رابط مسموح في إعدادات الخادم <input id="url" type="url"></label><label><input type="checkbox" id="authorized"> أؤكد أن لدي صلاحية استخدام هذه المصادر</label><button id="import">استيراد وتحقق</button><button id="map">توليد المطابقات</button></section><section><h2>مراجعة المطابقات</h2><div id="mappings"></div></section><section><h2>التشخيص — بدون أسرار</h2><button id="refresh">تحديث</button><button id="export">تصدير التشخيص</button><pre id="diagnostics"></pre></section></main><script src="/admin.js"></script></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>إدارة ASEEL MATCH TV</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <main>
+      <a href="/">التلفزيون</a>
+      <h1>لوحة الإدارة</h1>
+      <p>
+        المفتاح يبقى في ذاكرة هذه الصفحة فقط. استخدم هذه اللوحة داخل شبكة
+        موثوقة.
+      </p>
+      <label
+        >مفتاح الإدارة
+        <input id="token" type="password" autocomplete="off" /></label
+      ><button id="connect">فتح التشخيص</button>
+      <p id="status" role="status"></p>
+      <section>
+        <h2>الإعداد الأول</h2>
+        <ol>
+          <li>أضف مفاتيح البيانات إلى .env وأعد التشغيل.</li>
+          <li>استورد قائمة المشاهدة المصرح بها ودليل البرامج أدناه.</li>
+          <li>راجع القنوات ثم ولّد مطابقة المباريات.</li>
+          <li>راجع المطابقات غير المؤكدة قبل السماح بالتشغيل.</li>
+          <li>افتح /compat على PS4 ثم نفّذ اختبار الفيديو.</li>
+        </ol>
+        <label>معرّف المزوّد <input id="provider" value="personal" /></label
+        ><label
+          >النوع
+          <select id="kind">
+            <option value="m3u">M3U</option>
+            <option value="xmltv">XMLTV</option>
+          </select></label
+        ><label
+          >ملف محلي
+          <input
+            id="file"
+            type="file"
+            accept=".m3u,.m3u8,.xml,.xmltv,.txt" /></label
+        ><label>المحتوى <textarea id="content"></textarea></label
+        ><label
+          >أو رابط مسموح في إعدادات الخادم <input id="url" type="url" /></label
+        ><label
+          ><input type="checkbox" id="authorized" /> أؤكد أن لدي صلاحية استخدام
+          هذه المصادر</label
+        ><button id="import">استيراد وتحقق</button
+        ><button id="map">توليد المطابقات</button>
+      </section>
+      <section>
+        <h2>فحص المصادر المسجلة</h2>
+        <div id="sources"></div>
+      </section>
+      <section>
+        <h2>مراجعة المطابقات</h2>
+        <div id="mappings"></div>
+      </section>
+      <section>
+        <h2>التشخيص — بدون أسرار</h2>
+        <button id="refresh">تحديث</button
+        ><button id="export">تصدير التشخيص</button>
+        <pre id="diagnostics"></pre>
+      </section>
+    </main>
+    <script src="/admin.js"></script>
+  </body>
+</html>

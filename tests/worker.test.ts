@@ -1,2 +1,38 @@
-import{test}from'node:test';import assert from'node:assert/strict';import{createServer}from'node:http';import{Store}from'../services/api/store.js';import{SafeNet}from'../services/api/net.js';import{refreshCatalog}from'../services/worker/jobs.js';
-test('Threadfin-compatible refresh replaces removed source and keeps secrets server-side',async()=>{let version=1;const server=createServer((req,res)=>res.end('#EXTM3U\n#EXTINF:-1 tvg-id="test",Test\nhttp://127.0.0.1:'+port+'/'+version+'.m3u8'));await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));const port=(server.address()as any).port,s=new Store(':memory:'),net=new SafeNet([],['127.0.0.1']),provider={id:'threadfin',type:'threadfin',authorized:true,m3uUrl:'http://127.0.0.1:'+port+'/list'};try{await refreshCatalog(s,net,provider);version=2;await refreshCatalog(s,net,provider);assert.equal(s.all('source').filter(x=>x.enabled).length,1);assert.equal(s.all('source').length,2);}finally{s.close();server.close();}});
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { createServer } from "node:http";
+import { Store } from "../services/api/store.js";
+import { SafeNet } from "../services/api/net.js";
+import { refreshCatalog } from "../services/worker/jobs.js";
+test("Threadfin-compatible refresh replaces removed source and keeps secrets server-side", async () => {
+  let version = 1;
+  const server = createServer((req, res) =>
+    res.end(
+      '#EXTM3U\n#EXTINF:-1 tvg-id="test",Test\nhttp://127.0.0.1:' +
+        port +
+        "/" +
+        version +
+        ".m3u8"
+    )
+  );
+  await new Promise<void>((r) => server.listen(0, "127.0.0.1", r));
+  const port = (server.address() as any).port,
+    s = new Store(":memory:"),
+    net = new SafeNet([], ["127.0.0.1"]),
+    provider = {
+      id: "threadfin",
+      type: "threadfin",
+      authorized: true,
+      m3uUrl: "http://127.0.0.1:" + port + "/list"
+    };
+  try {
+    await refreshCatalog(s, net, provider);
+    version = 2;
+    await refreshCatalog(s, net, provider);
+    assert.equal(s.all("source").filter((x) => x.enabled).length, 1);
+    assert.equal(s.all("source").length, 2);
+  } finally {
+    s.close();
+    server.close();
+  }
+});

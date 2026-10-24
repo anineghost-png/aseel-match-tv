@@ -1,9 +1,196 @@
-(function(w){'use strict';var v=document.getElementById('video'),hls=null,session=null,retries=0,lastProgress=Date.now(),lastTime=0,loading=false,started=0,switching=false,generation=0;
-function status(s){Aseel.text('play-status',s);}function destroy(){if(hls){hls.destroy();hls=null;}if(v){v.pause();v.removeAttribute('src');v.load();}}
-function event(name,cb){if(!session){if(cb)cb('no session',{});return;}Aseel.request('POST','/api/playback/'+session.id+'/event',{token:session.token,event:name,startupMs:Math.min(120000,Date.now()-started)},cb||function(){});}
-function load(plan){var version=++generation;loading=true;destroy();lastProgress=Date.now();lastTime=0;started=Date.now();if(plan.mode==='native'){v.src=plan.url;play();}else if(plan.mode==='hlsjs'){var begin=function(){if(version!==generation)return;if(!w.Hls||!w.Hls.isSupported()){loading=false;status('مسار الفيديو غير مدعوم على هذا الجهاز');return;}hls=new w.Hls({maxBufferLength:20,maxMaxBufferLength:40,backBufferLength:10,enableWorker:false,manifestLoadingMaxRetry:1,fragLoadingMaxRetry:1});hls.loadSource(plan.url);hls.attachMedia(v);hls.on(w.Hls.Events.MANIFEST_PARSED,play);hls.on(w.Hls.Events.ERROR,function(_,data){if(data.fatal)fail();});};if(w.Hls)begin();else{var script=document.createElement('script');script.src='/vendor/hls.light.min.js';script.onload=begin;script.onerror=function(){loading=false;status('تعذر تحميل مشغل الفيديو');};document.head.appendChild(script);}}else{loading=false;status('لم يتم التحقق من مسار تشغيل متوافق');}}
-function play(){var p=v.play();if(p&&p.catch)p.catch(function(){loading=false;status('اضغط تشغيل في الفيديو للسماح بالمشاهدة');});}
-function fail(){if(switching||!session||loading&&Date.now()-started<1000)return;event('error');if(retries<1){retries++;load(session);return;}switching=true;var active=session;event('failover',function(err,next){switching=false;if(session!==active)return;if(err||!next.url){loading=false;destroy();session=null;status('تعذر التشغيل ولا يوجد مصدر احتياطي مؤكّد');return;}session.url=next.url;session.mode=next.mode;retries=0;load(session);status('تم التحويل تلقائيًا إلى مصدر احتياطي');});}
-if(v){v.addEventListener('playing',function(){loading=false;lastProgress=Date.now();event('playing');});v.addEventListener('timeupdate',function(){if(v.currentTime>lastTime){lastTime=v.currentTime;lastProgress=Date.now();}});v.addEventListener('stalled',function(){event('stalled');});v.addEventListener('error',function(){if(session)fail();});setInterval(function(){if(session&&!v.ended&&((!v.paused&&Date.now()-lastProgress>15000)||(loading&&Date.now()-started>20000)))fail();},2000);}
-w.AseelPlayer={load:load,play:play,stop:function(){event('stop');session=null;loading=false;switching=false;generation++;destroy();},getMetrics:function(){return {currentTime:v?v.currentTime:0,retries:retries};},onEvent:function(name,fn){if(v)v.addEventListener(name,fn);},loadMatch:function(id){var device=Aseel.get('deviceId');if(!device){status('افتح فحص توافق جهازك أولًا');return;}Aseel.request('POST','/api/playback',{fixtureId:id,deviceId:device},function(err,plan){if(err){status(plan.message||'لا يوجد مصدر مؤكّد لهذه المباراة');return;}if(session)event('stop');session=plan;retries=0;load(plan);});}};
+(function (w) {
+  "use strict";
+  var v = document.getElementById("video"),
+    hls = null,
+    session = null,
+    retries = 0,
+    lastProgress = Date.now(),
+    lastTime = 0,
+    loading = false,
+    started = 0,
+    switching = false,
+    generation = 0;
+  function status(s) {
+    Aseel.text("play-status", s);
+  }
+  function destroy() {
+    if (hls) {
+      hls.destroy();
+      hls = null;
+    }
+    if (v) {
+      v.pause();
+      v.removeAttribute("src");
+      v.load();
+    }
+  }
+  function event(name, cb) {
+    if (!session) {
+      if (cb) cb("no session", {});
+      return;
+    }
+    Aseel.request(
+      "POST",
+      "/api/playback/" + session.id + "/event",
+      {
+        token: session.token,
+        event: name,
+        startupMs: Math.min(120000, Date.now() - started)
+      },
+      cb || function () {}
+    );
+  }
+  function load(plan) {
+    var version = ++generation;
+    loading = true;
+    destroy();
+    lastProgress = Date.now();
+    lastTime = 0;
+    started = Date.now();
+    if (plan.mode === "native") {
+      v.src = plan.url;
+      play();
+    } else if (plan.mode === "hlsjs") {
+      var begin = function () {
+        if (version !== generation) return;
+        if (!w.Hls || !w.Hls.isSupported()) {
+          loading = false;
+          status("مسار الفيديو غير مدعوم على هذا الجهاز");
+          return;
+        }
+        hls = new w.Hls({
+          maxBufferLength: 20,
+          maxMaxBufferLength: 40,
+          backBufferLength: 10,
+          enableWorker: false,
+          manifestLoadingMaxRetry: 1,
+          fragLoadingMaxRetry: 1
+        });
+        hls.loadSource(plan.url);
+        hls.attachMedia(v);
+        hls.on(w.Hls.Events.MANIFEST_PARSED, play);
+        hls.on(w.Hls.Events.ERROR, function (_, data) {
+          if (data.fatal) fail();
+        });
+      };
+      if (w.Hls) begin();
+      else {
+        var script = document.createElement("script");
+        script.src = "/vendor/hls.light.min.js";
+        script.onload = begin;
+        script.onerror = function () {
+          loading = false;
+          status("تعذر تحميل مشغل الفيديو");
+        };
+        document.head.appendChild(script);
+      }
+    } else {
+      loading = false;
+      status("لم يتم التحقق من مسار تشغيل متوافق");
+    }
+  }
+  function play() {
+    var p = v.play();
+    if (p && p.catch)
+      p.catch(function () {
+        loading = false;
+        status("اضغط تشغيل في الفيديو للسماح بالمشاهدة");
+      });
+  }
+  function fail() {
+    if (switching || !session || (loading && Date.now() - started < 1000))
+      return;
+    event("error");
+    if (retries < 1) {
+      retries++;
+      load(session);
+      return;
+    }
+    switching = true;
+    var active = session;
+    event("failover", function (err, next) {
+      switching = false;
+      if (session !== active) return;
+      if (err || !next.url) {
+        loading = false;
+        destroy();
+        session = null;
+        status("تعذر التشغيل ولا يوجد مصدر احتياطي مؤكّد");
+        return;
+      }
+      session.url = next.url;
+      session.mode = next.mode;
+      retries = 0;
+      load(session);
+      status("تم التحويل تلقائيًا إلى مصدر احتياطي");
+    });
+  }
+  if (v) {
+    v.addEventListener("playing", function () {
+      loading = false;
+      lastProgress = Date.now();
+      event("playing");
+    });
+    v.addEventListener("timeupdate", function () {
+      if (v.currentTime > lastTime) {
+        lastTime = v.currentTime;
+        lastProgress = Date.now();
+      }
+    });
+    v.addEventListener("stalled", function () {
+      event("stalled");
+    });
+    v.addEventListener("error", function () {
+      if (session) fail();
+    });
+    setInterval(function () {
+      if (
+        session &&
+        !v.ended &&
+        ((!v.paused && Date.now() - lastProgress > 15000) ||
+          (loading && Date.now() - started > 20000))
+      )
+        fail();
+    }, 2000);
+  }
+  w.AseelPlayer = {
+    load: load,
+    play: play,
+    stop: function () {
+      event("stop");
+      session = null;
+      loading = false;
+      switching = false;
+      generation++;
+      destroy();
+    },
+    getMetrics: function () {
+      return { currentTime: v ? v.currentTime : 0, retries: retries };
+    },
+    onEvent: function (name, fn) {
+      if (v) v.addEventListener(name, fn);
+    },
+    loadMatch: function (id) {
+      var device = Aseel.get("deviceId");
+      if (!device) {
+        status("افتح فحص توافق جهازك أولًا");
+        return;
+      }
+      Aseel.request(
+        "POST",
+        "/api/playback",
+        { fixtureId: id, deviceId: device },
+        function (err, plan) {
+          if (err) {
+            status(plan.message || "لا يوجد مصدر مؤكّد لهذه المباراة");
+            return;
+          }
+          if (session) event("stop");
+          session = plan;
+          retries = 0;
+          load(plan);
+        }
+      );
+    }
+  };
 })(window);

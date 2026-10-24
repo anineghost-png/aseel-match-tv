@@ -1,2 +1,17 @@
-import{test}from'node:test';import assert from'node:assert/strict';import{nextFallback}from'../packages/core/failover.js';
-test('failover respects failed history and cooldown, never flaps',()=>{assert.deepEqual(nextFallback('a',['b','c'],[],{b:20000},15000,0),{action:'switch',source:'c'});assert.equal(nextFallback('c',['a','b'],['a'],{b:20000},16000,15000).action,'wait');assert.equal(nextFallback('c',['a','b'],['a'],{b:40000},30000,15000).action,'stop');});
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { nextFallback } from "../packages/core/failover.js";
+test("failover respects failed history and cooldown, never flaps", () => {
+  assert.deepEqual(nextFallback("a", ["b", "c"], [], { b: 20000 }, 15000, 0), {
+    action: "switch",
+    source: "c"
+  });
+  assert.equal(
+    nextFallback("c", ["a", "b"], ["a"], { b: 20000 }, 16000, 15000).action,
+    "wait"
+  );
+  assert.equal(
+    nextFallback("c", ["a", "b"], ["a"], { b: 40000 }, 30000, 15000).action,
+    "stop"
+  );
+});

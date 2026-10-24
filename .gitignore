@@ -8,3 +8,15 @@ test-results/
 playwright-report/
 *.log
 *.sqlite*
+# Private media imports and credential material, wherever placed
+*.m3u
+*.m3u8
+*.xmltv
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
+subscriptions/
+private/

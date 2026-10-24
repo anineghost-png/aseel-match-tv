@@ -3,3 +3,10 @@
 - LAN first; loopback default. No public deployment.
 - Profiles begin unverified; feature detection is not playback proof.
 - No stream discovery or DRM bypass.
+- Dependency audit found three vulnerable direct dependencies. Updated Fastify 5.12.7, @fastify/static 10.1.7 and Zod 4.6.7; subsequent audit reported zero known vulnerabilities.
+- HLS.js 1.6.13 remains lazy-loaded after runtime and observed playback verification; no unconditional polyfill/bundle on home.
+- Installed Chromium lacks H264/AAC. Preserve explicit skipped decode test and passing failure-path test instead of replacing evidence with a fake media success.
+- Remux/transcode/DASH and hosted exposure deferred until device/media requirements and deployment are available. Gate shown in KNOWN_LIMITATIONS; no claim that all blueprint acceptance criteria are satisfied.
+- Formatter configured without trailing commas after ES5 parser caught function-call trailing commas. Regression test remains mandatory.
+- Original blueprint is unchanged; local Git history retained for later upload, never claim GitHub repository creation from local git init.
+- Resume: private GitHub repository now verified with connector push permission. Direct Git HTTPS cannot authenticate; keep exact original commit objects instead of reconstructing different commits through the contents API. Upload remains blocked, not completed.
