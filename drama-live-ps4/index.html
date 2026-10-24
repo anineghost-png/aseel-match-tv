@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#050b18">
+  <title>Drama Hub — PS4</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">D</div>
+      <div>
+        <strong>DRAMA HUB</strong>
+        <span>بوابتك السريعة على PS4</span>
+      </div>
+    </div>
+    <div class="top-status">
+      <span id="deviceBadge" class="badge">متصفح</span>
+      <span id="clock" class="clock">--:--</span>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <nav class="side-nav" aria-label="القائمة الرئيسية">
+      <button class="nav-item active" data-view="home"><span class="nav-icon">⌂</span><span>الرئيسية</span></button>
+      <button class="nav-item" data-view="watch"><span class="nav-icon">▶</span><span>المشاهدة</span></button>
+      <button class="nav-item" data-view="categories"><span class="nav-icon">▦</span><span>الأقسام</span></button>
+      <button class="nav-item" data-view="favorites"><span class="nav-icon">♥</span><span>المفضلة</span></button>
+      <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>الإعدادات</span></button>
+      <div class="controller-hint">
+        <span>✚ تنقل</span><span>✕ اختيار</span><span>○ رجوع</span>
+      </div>
+    </nav>
+
+    <section class="content">
+      <div id="home" class="view active-view">
+        <section class="hero">
+          <div class="hero-copy">
+            <div class="eyebrow">مصمم للتلفزيون ويد التحكم</div>
+            <h1>كل شيء يبدأ من شاشة واحدة.</h1>
+            <p>واجهة خفيفة للـPS4 توصلك إلى Drama Live بسرعة، بدون هاتف وسيط وبدون سيرفر منزلي.</p>
+            <div class="hero-actions">
+              <button class="primary-action" data-open-drama="1">فتح Drama Live <span>▶</span></button>
+              <button class="secondary-action" data-view="watch">وضع المشاهدة</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="stadium-ring ring-1"></div>
+            <div class="stadium-ring ring-2"></div>
+            <div class="ball">⚽</div>
+            <div class="signal s1"></div><div class="signal s2"></div><div class="signal s3"></div>
+          </div>
+        </section>
+
+        <section class="section-block">
+          <div class="section-heading"><div><span class="live-dot"></span><h2>وصول سريع</h2></div><span class="muted">اختصر التنقل على PS4</span></div>
+          <div class="quick-grid">
+            <button class="quick-card accent-purple" data-open-drama="1" data-label="Drama Live">
+              <span class="card-icon">▶</span><strong>Drama Live</strong><small>المشغل الكامل</small>
+            </button>
+            <button class="quick-card accent-blue" data-section="رياضة">
+              <span class="card-icon">⚽</span><strong>رياضة</strong><small>انتقل للمصدر الرياضي</small>
+            </button>
+            <button class="quick-card accent-cyan" data-section="أخبار">
+              <span class="card-icon">◉</span><strong>أخبار</strong><small>قنوات الأخبار</small>
+            </button>
+            <button class="quick-card accent-red" data-section="أفلام ومسلسلات">
+              <span class="card-icon">▣</span><strong>أفلام ومسلسلات</strong><small>المحتوى الترفيهي</small>
+            </button>
+            <button class="quick-card accent-gold" data-section="أطفال">
+              <span class="card-icon">★</span><strong>أطفال</strong><small>قنوات العائلة</small>
+            </button>
+            <button class="quick-card accent-green" data-section="وثائقي">
+              <span class="card-icon">◇</span><strong>وثائقي</strong><small>معرفة ووثائقيات</small>
+            </button>
+          </div>
+        </section>
+
+        <section class="section-block resume-block">
+          <div class="section-heading"><div><h2>آخر استخدام</h2></div><span id="lastUseLabel" class="muted">لا يوجد نشاط بعد</span></div>
+          <button class="resume-card" data-open-drama="1">
+            <div class="resume-logo">D</div>
+            <div class="resume-copy"><strong>العودة إلى Drama Live</strong><small id="resumeText">جاهز للفتح من نفس المتصفح</small></div>
+            <span class="resume-arrow">‹</span>
+          </button>
+        </section>
+      </div>
+
+      <div id="watch" class="view">
+        <section class="watch-panel">
+          <div class="watch-preview">
+            <div class="preview-glow"></div>
+            <div class="preview-center">
+              <div class="play-orb">▶</div>
+              <h2>وضع المشاهدة</h2>
+              <p>يفتح Drama Live مباشرة في نفس المتصفح. استخدم زر الرجوع للعودة إلى البوابة.</p>
+            </div>
+            <div class="watch-badges"><span>PS4</span><span>Controller</span><span>Web</span></div>
+          </div>
+          <aside class="watch-side">
+            <div class="side-card">
+              <span class="mini-label">الحالة</span><strong class="success">جاهز</strong><p>لا يعتمد على هاتف أو كمبيوتر عندك.</p>
+            </div>
+            <div class="side-card">
+              <span class="mini-label">FG Code</span><strong id="fgStatus">غير محفوظ</strong><p>يبقى داخل هذا المتصفح فقط ولا يُرفع للسيرفر.</p>
+            </div>
+            <button class="primary-action full" data-open-drama="1">تشغيل Drama Live الآن</button>
+            <button class="secondary-action full" data-view="settings">إعداد الرمز</button>
+          </aside>
+        </section>
+      </div>
+
+      <div id="categories" class="view">
+        <div class="page-title"><div><span class="eyebrow">كل المحتوى</span><h1>الأقسام</h1></div><p>هذه اختصارات وصول؛ القنوات نفسها تبقى داخل Drama Live وتتحدث من المصدر.</p></div>
+        <div id="categoryGrid" class="category-grid"></div>
+      </div>
+
+      <div id="favorites" class="view">
+        <div class="page-title"><div><span class="eyebrow">مخصص لك</span><h1>المفضلة</h1></div><p>احفظ أقسامك المفضلة محليًا على نفس المتصفح.</p></div>
+        <div id="favoriteGrid" class="category-grid"></div>
+        <div id="emptyFavorites" class="empty-state"><div>♡</div><strong>ما عندك مفضلة بعد</strong><p>ادخل الأقسام واضغط زر القلب على أي قسم.</p></div>
+      </div>
+
+      <div id="settings" class="view">
+        <div class="page-title"><div><span class="eyebrow">مرة واحدة فقط</span><h1>الإعدادات</h1></div><p>كل الإعدادات تُحفظ محليًا في متصفحك.</p></div>
+        <div class="settings-grid">
+          <div class="setting-card">
+            <div><span class="setting-icon">#</span><div><strong>FG Code</strong><small>احفظ الرمز عندك لسهولة تذكره عند فتح Drama Live.</small></div></div>
+            <input id="fgInput" type="text" inputmode="numeric" autocomplete="off" placeholder="أدخل الرمز" maxlength="32">
+            <div class="setting-actions"><button id="saveFg" class="primary-action compact">حفظ</button><button id="clearFg" class="secondary-action compact">مسح</button></div>
+          </div>
+          <div class="setting-card">
+            <div><span class="setting-icon">↗</span><div><strong>عنوان Drama Live</strong><small>الوجهة الحالية التي تفتحها البوابة.</small></div></div>
+            <div class="url-box">web.dramalive.cc</div>
+            <button class="secondary-action compact" data-open-drama="1">اختبار الفتح</button>
+          </div>
+          <div class="setting-card">
+            <div><span class="setting-icon">⌁</span><div><strong>اختبار التحكم</strong><small>تحقق من التركيز والتنقل قبل الدخول للمشغل.</small></div></div>
+            <button id="focusTest" class="secondary-action compact">ابدأ الاختبار</button>
+          </div>
+          <div class="setting-card danger-card">
+            <div><span class="setting-icon">×</span><div><strong>إعادة ضبط البوابة</strong><small>يحذف المفضلة والرمز وسجل الاستخدام من هذا المتصفح فقط.</small></div></div>
+            <button id="resetApp" class="danger-action compact">إعادة ضبط</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="sectionModal" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="sectionTitle">
+      <button class="modal-close" data-close-modal="1" aria-label="إغلاق">×</button>
+      <div id="sectionIcon" class="modal-icon">⚽</div>
+      <span class="eyebrow">اختصار سريع</span>
+      <h2 id="sectionTitle">رياضة</h2>
+      <p id="sectionText">سنفتح Drama Live، ومن داخله اختر هذا القسم من قائمتك.</p>
+      <div class="modal-actions">
+        <button id="modalOpenDrama" class="primary-action">فتح Drama Live</button>
+        <button id="modalFavorite" class="secondary-action">♡ إضافة للمفضلة</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>بوابة شخصية غير تابعة لـ Drama Live</span>
+    <span>لا تخزن روابط بث أو بيانات حساب على السيرفر</span>
+  </footer>
+
+  <script src="focus.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
