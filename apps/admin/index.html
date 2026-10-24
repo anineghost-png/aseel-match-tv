@@ -20,6 +20,30 @@
       ><button id="connect">فتح التشخيص</button>
       <p id="status" role="status"></p>
       <section>
+        <h2>ربط Drama Live</h2>
+        <p>
+          الصق هنا النص الذي يشاركه Drama Live للمصدر. يتعرف ASEEL MATCH TV
+          تلقائيًا على M3U وXtream وFG Code. بيانات المصدر لا تظهر في شاشة
+          التلفزيون أو التشخيص.
+        </p>
+        <label
+          >معرّف المزوّد
+          <input id="drama-provider" value="drama-live" /></label
+        ><label
+          >نص المصدر من Drama Live
+          <textarea
+            id="drama-content"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="الصق النص أو الرابط الذي يخرجه التطبيق هنا"></textarea></label
+        ><label
+          ><input type="checkbox" id="drama-authorized" /> أؤكد أن هذا المصدر
+          مملوك لي أو مصرح لي باستخدامه</label
+        ><button id="drama-preview">فحص بدون حفظ</button
+        ><button id="drama-import">ربط وتحديث القنوات</button>
+        <p id="drama-result" role="status"></p>
+      </section>
+      <section>
         <h2>الإعداد الأول</h2>
         <ol>
           <li>أضف مفاتيح البيانات إلى .env وأعد التشغيل.</li>
