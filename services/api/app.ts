@@ -6,6 +6,9 @@ import {timingSafeEqual,randomUUID} from 'node:crypto';
 import {z} from 'zod';
 import type {Config} from './config.js';
 import {Store} from './store.js';
+import {QuotaCache} from './quota.js';
+import {FootballData,ApiFootball,demoFixtures} from '../../packages/providers/sports.js';
+import {baghdadDate} from '../../packages/core/names.js';
 export async function buildApp(cfg:Config,store=new Store(cfg.DATA_DIR)){
  const app=Fastify({logger:{redact:['req.headers.authorization','req.headers.cookie']},bodyLimit:2*1024*1024});
  await app.register(rateLimit,{max:100,timeWindow:'1 minute'});
@@ -16,7 +19,10 @@ export async function buildApp(cfg:Config,store=new Store(cfg.DATA_DIR)){
  app.get('/health',async()=>({ok:true,demo:cfg.DEMO_MODE,ps4Verified:false}));
  app.get('/compat',(_,reply)=>reply.sendFile('compat.html'));
  app.get('/controller',(_,reply)=>reply.sendFile('controller.html'));
- app.get('/api/fixtures',async()=>({fixtures:[],demo:cfg.DEMO_MODE,updatedAt:null}));
+ const quota=new QuotaCache(store,cfg.QUOTA_RESERVE_PERCENT);
+ const sports=cfg.FOOTBALL_DATA_API_KEY?new FootballData(cfg.FOOTBALL_DATA_API_KEY):cfg.API_FOOTBALL_KEY?new ApiFootball(cfg.API_FOOTBALL_KEY):null;
+ app.get('/api/fixtures',async()=>{if(cfg.DEMO_MODE)return {fixtures:demoFixtures(),demo:true,updatedAt:new Date().toISOString()};if(!sports)return {fixtures:store.all('fixture'),demo:false,stale:true,updatedAt:null};try{const r=await quota.get(sports.name,'fixtures:'+baghdadDate(),sports.name==='football-data'?cfg.FOOTBALL_DATA_DAILY_LIMIT:cfg.API_FOOTBALL_DAILY_LIMIT,120000,()=>sports.fixtures(baghdadDate()));for(const f of r.value)store.put('fixture',f.id,f);return {fixtures:r.value,demo:false,stale:r.stale,updatedAt:r.updatedAt};}catch{return {fixtures:store.all('fixture'),demo:false,stale:true,updatedAt:null};}});
+ app.get('/api/admin/standings/:code',async(req)=>{if(!sports)throw Error('PROVIDER_REQUIRED');const code=(req.params as any).code;return quota.get(sports.name,'standings:'+code,100,21600000,()=>sports.standings(code));});
  const device=z.object({capabilities:z.record(z.string(),z.union([z.boolean(),z.string().max(300),z.number().finite()]))});
  app.post('/api/devices',async(req,reply)=>{const body=device.parse(req.body),id=randomUUID();store.put('device',id,{id,capabilities:body.capabilities,userAgent:(req.headers['user-agent']||'').slice(0,300),ps4:/PlayStation 4/i.test(req.headers['user-agent']||''),verified:{nativeHls:false,mse:false},lastSeenAt:new Date().toISOString()});return reply.code(201).send({id,verified:false});});
  app.get('/api/admin/diagnostics',async()=>({devices:store.all('device'),quotas:store.quotas(),ps4Acceptance:'PENDING'}));
