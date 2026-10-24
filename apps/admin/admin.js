@@ -82,6 +82,36 @@
       refresh
     );
   }
+  function drama(action) {
+    var result = document.getElementById("drama-result"),
+      text = document.getElementById("drama-content").value,
+      data = {
+        providerId: document.getElementById("drama-provider").value,
+        authorized: document.getElementById("drama-authorized").checked,
+        text: text
+      };
+    if (!text) {
+      result.textContent = "الصق نص المصدر من Drama Live أولاً";
+      return;
+    }
+    call("providers/drama" + (action === "preview" ? "/preview" : ""), data, function (r) {
+      if (action === "preview") {
+        result.textContent =
+          "تم التعرف على المصدر: " + r.kind + " · المضيف: " + r.host;
+        return;
+      }
+      result.textContent =
+        "تم الربط: " +
+        r.kind +
+        " · " +
+        r.channels +
+        " قناة · " +
+        r.sources +
+        " مصدر";
+      document.getElementById("drama-content").value = "";
+      refresh();
+    });
+  }
   document.getElementById("connect").onclick = function () {
     token = document.getElementById("token").value;
     document.getElementById("token").value = "";
@@ -90,6 +120,12 @@
   document.getElementById("refresh").onclick = refresh;
   document.getElementById("map").onclick = function () {
     call("map", {}, refresh);
+  };
+  document.getElementById("drama-preview").onclick = function () {
+    drama("preview");
+  };
+  document.getElementById("drama-import").onclick = function () {
+    drama("import");
   };
   document.getElementById("import").onclick = function () {
     var data = {
