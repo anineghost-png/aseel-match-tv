@@ -23,7 +23,8 @@ const findValue = (text: string, labels: string[]) => {
 
 const safeHttpUrl = (raw: string) => {
   const value = cleanToken(raw);
-  const url = new URL(value);
+  const normalized = /^https?:\/\//i.test(value) ? value : `http://${value}`;
+  const url = new URL(normalized);
   if (!["http:", "https:"].includes(url.protocol)) throw Error("DRAMA_URL");
   if (url.username || url.password) throw Error("DRAMA_URL_USERINFO");
   return url;
@@ -66,7 +67,11 @@ export function parseDramaShare(input: string): DramaSource {
   }
 
   const urls = text.match(/https?:\/\/[^\s<>"']+/gi) || [];
-  const candidates = [server, ...urls]
+  const bare =
+    !/\s/.test(text) && /^[a-z0-9.-]+(?::\d+)?(?:\/\S*)?$/i.test(text)
+      ? text
+      : "";
+  const candidates = [server, ...urls, bare]
     .filter(Boolean)
     .map(cleanToken)
     .filter((value, index, all) => all.indexOf(value) === index);
