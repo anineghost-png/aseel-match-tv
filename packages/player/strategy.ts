@@ -1,0 +1,1 @@
+export function strategy(device:any){if(device?.verified?.nativeHls)return 'native';if(device?.verified?.mse&&device.capabilities.MediaSource&&device.capabilities.Promise&&device.capabilities.Map&&device.capabilities.Set&&device.capabilities.mseBaseline)return 'hlsjs';return null;}

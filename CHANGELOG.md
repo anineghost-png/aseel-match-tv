@@ -11,3 +11,5 @@ M3U deduplication/lineage, chunked SAX XMLTV parser with DTD rejection and rolli
 Conservative bilingual evidence scorer, persistent review/rules, admin onboarding and diagnostic UI. Eighteen tests passed; wrong simultaneous teams and stale EPG cannot auto-confirm.
 ## M5
 Bounded HLS manifest/segment probing, measured throughput/TTFB, history and weighted ranking. Controlled HTTP stable/dead tests passed (21 total).
+## M6
+Capability-gated native/HLS.js player and opaque registered-source HLS gateway; local FFmpeg H264/AAC test assets. Client-observed playback verification remains distinct from physical PS4 acceptance. Integrated authenticated ingestion, review, health and diagnostic routes. 23 unit/integration passed; 4 browser passed, actual H264/AAC playback skipped because installed Chromium lacks codecs. Not a playback success claim.
